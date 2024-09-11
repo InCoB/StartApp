@@ -1,15 +1,16 @@
-import { anthropic } from "@ai-sdk/anthropic";
-import { convertToCoreMessages, streamText } from "ai";
+import { StreamingTextResponse } from 'ai'
 
-export const runtime = "edge";
+export const runtime = 'edge'
 
 export async function POST(req: Request) {
-  const { messages } = await req.json();
-  const result = await streamText({
-    model: anthropic("claude-3-5-sonnet-20240620"),
-    messages: convertToCoreMessages(messages),
-    system: "You are a helpful AI assistant",
+  // Implement your chat logic here without using Anthropic
+  // For now, let's just return a dummy response
+  const dummyResponse = new ReadableStream({
+    start(controller) {
+      controller.enqueue('This is a dummy response.');
+      controller.close();
+    },
   });
 
-  return result.toDataStreamResponse();
+  return new StreamingTextResponse(dummyResponse);
 }
